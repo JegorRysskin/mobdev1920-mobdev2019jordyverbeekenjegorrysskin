@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">PXLParking</string>
+    <string name="parkingimage">parkingImage</string>
+</resources>
