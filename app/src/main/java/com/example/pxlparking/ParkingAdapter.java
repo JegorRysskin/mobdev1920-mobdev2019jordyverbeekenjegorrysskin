@@ -6,17 +6,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ParkingAdapter extends RecyclerView.Adapter<ParkingAdapter.ParkingViewHolder> {
     private Cursor mCursor;
     private Context mContext;
+    private final ParkingAdapterOnClickHandler mClickHandler;
 
-    public ParkingAdapter(Context context, Cursor cursor) {
+    public interface ParkingAdapterOnClickHandler {
+        void onClick(int adapterPosition);
+    }
+
+    public ParkingAdapter(Context context, Cursor cursor, ParkingAdapterOnClickHandler clickHandler) {
         mCursor = cursor;
         mContext = context;
+        mClickHandler = clickHandler;
     }
 
     @Override
@@ -55,7 +60,6 @@ public class ParkingAdapter extends RecyclerView.Adapter<ParkingAdapter.ParkingV
 
     public class ParkingViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView mParkingNameTextView;
-        private Toast mToast;
 
         public ParkingViewHolder(View itemView) {
             super(itemView);
@@ -67,12 +71,7 @@ public class ParkingAdapter extends RecyclerView.Adapter<ParkingAdapter.ParkingV
         public void onClick(View view) {
             int adapterPosition = getAdapterPosition();
 
-            if (mToast !=null){
-                mToast.cancel();
-            }
-
-            mToast = Toast.makeText(mContext, adapterPosition + "", Toast.LENGTH_LONG);
-            mToast.show();
+            mClickHandler.onClick(adapterPosition);
         }
     }
 }
