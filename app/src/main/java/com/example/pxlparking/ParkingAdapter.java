@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ParkingAdapter extends RecyclerView.Adapter<ParkingAdapter.ParkingViewHolder> {
+    public static Object ParkingAdapterOnClickHandler;
     private Cursor mCursor;
     private Context mContext;
     private final ParkingAdapterOnClickHandler mClickHandler;
