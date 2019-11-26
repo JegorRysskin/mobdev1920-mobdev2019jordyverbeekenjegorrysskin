@@ -1,15 +1,14 @@
 package com.example.pxlparking;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,13 +21,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 
-public class MainActivity extends AppCompatActivity implements ParkingAdapter.ParkingAdapterOnClickHandler {
+public class MainActivity extends AppCompatActivity implements ParkingAdapterOnClickHandler {
 
     private RecyclerView mRecyclerView;
     private ParkingAdapter mAdapter;
     private Cursor mCursor;
     private Context mContext;
-    private ParkingAdapter.ParkingAdapterOnClickHandler mClickhandler;
+    private ParkingAdapterOnClickHandler mClickhandler;
 
     private String sample_parkingdata = "[{\"id\":0, \"name\": \"Oude Brandweer\", \"address\": \"Willekensmolenstraat 120, 3500 Hasselt\", \"parkingSpots\": 135, \"lat\":50.933116, \"long\":5.351454}, " +
             "{\"id\":1, \"name\": \"De Singel\", \"address\": \"Elfde-Liniestraat 32, 3500 Hasselt\", \"parkingSpots\": 199, \"lat\":50.935183, \"long\":5.346945}, " +
