@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -18,6 +19,9 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,7 +33,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 
-public class MainActivity extends AppCompatActivity implements ParkingAdapter.ParkingAdapterOnClickHandler {
+public class MainActivity extends AppCompatActivity implements ParkingAdapterOnClickHandler {
 
     private RecyclerView mRecyclerView;
     private ParkingAdapter mAdapter;
@@ -39,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements ParkingAdapter.Pa
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     private NavigationView nv;
+    private ParkingAdapterOnClickHandler mClickhandler;
 
     final Intent intent = new Intent(this, MainActivity.class);
 
