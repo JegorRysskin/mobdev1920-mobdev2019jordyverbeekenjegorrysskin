@@ -7,8 +7,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -17,11 +15,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,8 +37,6 @@ public class MainActivity extends AppCompatActivity implements ParkingAdapterOnC
     private ActionBarDrawerToggle mToggle;
     private NavigationView nv;
     private ParkingAdapterOnClickHandler mClickhandler;
-
-    final Intent intent = new Intent(this, MainActivity.class);
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference firebaseRootRef = database.getReference();
@@ -89,10 +81,12 @@ public class MainActivity extends AppCompatActivity implements ParkingAdapterOnC
                     case R.id.nav_home:
 
                         Toast.makeText(MainActivity.this, "Current page", Toast.LENGTH_SHORT).show();
-                        startActivity(intent);
+                        Intent intentMainActivity = new Intent(MainActivity.this, MainActivity.class);
+                        startActivity(intentMainActivity);
                         break;
                     case R.id.nav_empty:
-                        Toast.makeText(MainActivity.this, "Empty spots", Toast.LENGTH_SHORT).show();
+                        Intent intentEmptySpotsActivity = new Intent(MainActivity.this, EmptySpotsActivity.class);
+                        startActivity(intentEmptySpotsActivity);
                         break;
                     default:
                         return true;
