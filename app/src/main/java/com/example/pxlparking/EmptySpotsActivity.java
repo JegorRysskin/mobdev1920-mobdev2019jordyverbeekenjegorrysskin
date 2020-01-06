@@ -8,15 +8,25 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class EmptySpotsActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     private NavigationView nv;
+
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference firebaseRootRef = database.getReference();
+    DatabaseReference parkingReference = firebaseRootRef.child("parkings");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +62,31 @@ public class EmptySpotsActivity extends AppCompatActivity {
 
             }
         });
+
+        parkingReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                TextView name0 = findViewById(R.id.name0);
+                name0.setText(dataSnapshot.child("0").child("name").getValue().toString());
+                TextView name1 = findViewById(R.id.name1);
+                name1.setText(dataSnapshot.child("1").child("name").getValue().toString());
+                TextView name2 = findViewById(R.id.name2);
+                name2.setText(dataSnapshot.child("2").child("name").getValue().toString());
+                TextView name3 = findViewById(R.id.name3);
+                name3.setText(dataSnapshot.child("3").child("name").getValue().toString());
+                TextView name4 = findViewById(R.id.name4);
+                name4.setText(dataSnapshot.child("4").child("name").getValue().toString());
+                TextView name5 = findViewById(R.id.name5);
+                name5.setText(dataSnapshot.child("5").child("name").getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
     }
 
     @Override
@@ -63,4 +98,6 @@ public class EmptySpotsActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }

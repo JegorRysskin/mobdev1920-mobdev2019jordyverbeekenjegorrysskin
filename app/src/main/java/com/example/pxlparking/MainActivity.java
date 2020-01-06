@@ -79,8 +79,6 @@ public class MainActivity extends AppCompatActivity implements ParkingAdapterOnC
                 int id = item.getItemId();
                 switch (id) {
                     case R.id.nav_home:
-
-                        Toast.makeText(MainActivity.this, "Current page", Toast.LENGTH_SHORT).show();
                         Intent intentMainActivity = new Intent(MainActivity.this, MainActivity.class);
                         startActivity(intentMainActivity);
                         break;
