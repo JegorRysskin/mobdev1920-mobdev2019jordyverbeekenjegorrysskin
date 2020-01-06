@@ -1,15 +1,27 @@
 package com.example.pxlparking;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.app.Activity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,14 +39,13 @@ public class MainActivity extends AppCompatActivity implements ParkingAdapterOnC
     private ParkingAdapter mAdapter;
     private Cursor mCursor;
     private Context mContext;
+    private ParkingAdapter.ParkingAdapterOnClickHandler mClickhandler;
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mToggle;
+    private NavigationView nv;
     private ParkingAdapterOnClickHandler mClickhandler;
 
-    private String sample_parkingdata = "[{\"id\":0, \"name\": \"Oude Brandweer\", \"address\": \"Willekensmolenstraat 120, 3500 Hasselt\", \"parkingSpots\": 135, \"lat\":50.933116, \"long\":5.351454}, " +
-            "{\"id\":1, \"name\": \"De Singel\", \"address\": \"Elfde-Liniestraat 32, 3500 Hasselt\", \"parkingSpots\": 199, \"lat\":50.935183, \"long\":5.346945}, " +
-            "{\"id\":2, \"name\": \"Grenslandhallen\", \"address\": \"Grenslandhallen, 3500 Hasselt\", \"parkingSpots\": 250, \"lat\":50.933845, \"long\":5.362953}, " +
-            "{\"id\":3, \"name\": \"Hawaii\", \"address\": \"Koning Boudewijnlaan Parking, 3500 Hasselt\", \"parkingSpots\": 175, \"lat\":50.932676, \"long\":5.344924}, " +
-            "{\"id\":4, \"name\": \"Ijshal De Schaverdijn\", \"address\": \"Gouverneur Verwilghensingel 13, 3500 Hasselt\", \"parkingSpots\": 150, \"lat\":50.937358, \"long\":5.354852}, " +
-            "{\"id\":5, \"name\": \"Japanse Tuin\", \"address\": \"Gouverneur Verwilghensingel 16, 3500 Hasselt\", \"parkingSpots\": 100, \"lat\":50.935296, \"long\":5.358092}]";
+    final Intent intent = new Intent(this, MainActivity.class);
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference firebaseRootRef = database.getReference();
@@ -46,10 +57,18 @@ public class MainActivity extends AppCompatActivity implements ParkingAdapterOnC
         setContentView(R.layout.activity_main);
         mRecyclerView = findViewById(R.id.reclyclerview_parking);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        mRecyclerView.setAdapter(new ParkingAdapter(this,mCursor,this));
+        mRecyclerView.setAdapter(new ParkingAdapter(this, mCursor, this));
 
         mContext = this;
         mClickhandler = this;
+
+        mDrawerLayout = findViewById(R.id.drawerLayout);
+        mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
+
+        mDrawerLayout.addDrawerListener(mToggle);
+        mToggle.syncState();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         loadParkingData(new MyCallback() {
             @Override
@@ -62,6 +81,37 @@ public class MainActivity extends AppCompatActivity implements ParkingAdapterOnC
             }
         });
 
+        nv = findViewById(R.id.nav_view);
+        nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                switch (id) {
+                    case R.id.nav_home:
+
+                        Toast.makeText(MainActivity.this, "Current page", Toast.LENGTH_SHORT).show();
+                        startActivity(intent);
+                        break;
+                    case R.id.nav_empty:
+                        Toast.makeText(MainActivity.this, "Empty spots", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        return true;
+                }
+                return true;
+
+            }
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if (mToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void loadParkingData(final MyCallback myCallback) {
@@ -112,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements ParkingAdapterOnC
         startActivity(intent);
     }
 
-    private interface MyCallback{
+    private interface MyCallback {
         void onCallback(String jsonString);
     }
 }
