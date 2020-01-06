@@ -1,6 +1,9 @@
 package com.example.pxlparking;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -10,6 +13,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,13 +33,8 @@ public class MainActivity extends AppCompatActivity implements ParkingAdapter.Pa
     private Cursor mCursor;
     private Context mContext;
     private ParkingAdapter.ParkingAdapterOnClickHandler mClickhandler;
-
-    private String sample_parkingdata = "[{\"id\":0, \"name\": \"Oude Brandweer\", \"address\": \"Willekensmolenstraat 120, 3500 Hasselt\", \"parkingSpots\": 135, \"lat\":50.933116, \"long\":5.351454}, " +
-            "{\"id\":1, \"name\": \"De Singel\", \"address\": \"Elfde-Liniestraat 32, 3500 Hasselt\", \"parkingSpots\": 199, \"lat\":50.935183, \"long\":5.346945}, " +
-            "{\"id\":2, \"name\": \"Grenslandhallen\", \"address\": \"Grenslandhallen, 3500 Hasselt\", \"parkingSpots\": 250, \"lat\":50.933845, \"long\":5.362953}, " +
-            "{\"id\":3, \"name\": \"Hawaii\", \"address\": \"Koning Boudewijnlaan Parking, 3500 Hasselt\", \"parkingSpots\": 175, \"lat\":50.932676, \"long\":5.344924}, " +
-            "{\"id\":4, \"name\": \"Ijshal De Schaverdijn\", \"address\": \"Gouverneur Verwilghensingel 13, 3500 Hasselt\", \"parkingSpots\": 150, \"lat\":50.937358, \"long\":5.354852}, " +
-            "{\"id\":5, \"name\": \"Japanse Tuin\", \"address\": \"Gouverneur Verwilghensingel 16, 3500 Hasselt\", \"parkingSpots\": 100, \"lat\":50.935296, \"long\":5.358092}]";
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mToggle;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference firebaseRootRef = database.getReference();
@@ -52,6 +51,14 @@ public class MainActivity extends AppCompatActivity implements ParkingAdapter.Pa
         mContext = this;
         mClickhandler = this;
 
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
+
+        mDrawerLayout.addDrawerListener(mToggle);
+        mToggle.syncState();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         loadParkingData(new MyCallback() {
             @Override
             public void onCallback(String jsonString) {
@@ -63,6 +70,16 @@ public class MainActivity extends AppCompatActivity implements ParkingAdapter.Pa
             }
         });
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if (mToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void loadParkingData(final MyCallback myCallback) {
@@ -91,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements ParkingAdapter.Pa
         }
         return null;
     }
-
+git
     @Override
     public void onClick(int adapterPosition) {
         Intent intent = new Intent(this, MapActivity.class);
