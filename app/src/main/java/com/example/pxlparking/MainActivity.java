@@ -14,7 +14,10 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,6 +38,9 @@ public class MainActivity extends AppCompatActivity implements ParkingAdapter.Pa
     private ParkingAdapter.ParkingAdapterOnClickHandler mClickhandler;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
+    private NavigationView nv;
+
+    final Intent intent = new Intent(this, MainActivity.class);
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference firebaseRootRef = database.getReference();
@@ -46,12 +52,12 @@ public class MainActivity extends AppCompatActivity implements ParkingAdapter.Pa
         setContentView(R.layout.activity_main);
         mRecyclerView = findViewById(R.id.reclyclerview_parking);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        mRecyclerView.setAdapter(new ParkingAdapter(this,mCursor,this));
+        mRecyclerView.setAdapter(new ParkingAdapter(this, mCursor, this));
 
         mContext = this;
         mClickhandler = this;
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        mDrawerLayout = findViewById(R.id.drawerLayout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
 
         mDrawerLayout.addDrawerListener(mToggle);
@@ -70,6 +76,27 @@ public class MainActivity extends AppCompatActivity implements ParkingAdapter.Pa
             }
         });
 
+        nv = findViewById(R.id.nav_view);
+        nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                switch (id) {
+                    case R.id.nav_home:
+
+                        Toast.makeText(MainActivity.this, "Current page", Toast.LENGTH_SHORT).show();
+                        startActivity(intent);
+                        break;
+                    case R.id.nav_empty:
+                        Toast.makeText(MainActivity.this, "Empty spots", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        return true;
+                }
+                return true;
+
+            }
+        });
     }
 
     @Override
@@ -108,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements ParkingAdapter.Pa
         }
         return null;
     }
-git
+
     @Override
     public void onClick(int adapterPosition) {
         Intent intent = new Intent(this, MapActivity.class);
@@ -130,7 +157,7 @@ git
         startActivity(intent);
     }
 
-    private interface MyCallback{
+    private interface MyCallback {
         void onCallback(String jsonString);
     }
 }
