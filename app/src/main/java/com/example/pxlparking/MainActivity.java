@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements ParkingAdapterOnC
     private ParkingAdapter mAdapter;
     private Cursor mCursor;
     private Context mContext;
-    private ParkingAdapter.ParkingAdapterOnClickHandler mClickhandler;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     private NavigationView nv;
