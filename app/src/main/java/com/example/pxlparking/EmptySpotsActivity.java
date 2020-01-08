@@ -67,17 +67,34 @@ public class EmptySpotsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 TextView name0 = findViewById(R.id.name0);
-                name0.setText(dataSnapshot.child("0").child("name").getValue().toString());
+                name0.setText(dataSnapshot.child("0").child("name").getValue().toString() + ":  ");
+                TextView parkingSpots0 = findViewById(R.id.parkingSpots0);
+                parkingSpots0.setText(dataSnapshot.child("0").child("parkingSpots").getValue().toString());
+
                 TextView name1 = findViewById(R.id.name1);
-                name1.setText(dataSnapshot.child("1").child("name").getValue().toString());
+                name1.setText(dataSnapshot.child("1").child("name").getValue().toString() + ":  ");
+                TextView parkingSpots1 = findViewById(R.id.parkingSpots1);
+                parkingSpots1.setText(dataSnapshot.child("1").child("parkingSpots").getValue().toString());
+
                 TextView name2 = findViewById(R.id.name2);
-                name2.setText(dataSnapshot.child("2").child("name").getValue().toString());
+                name2.setText(dataSnapshot.child("2").child("name").getValue().toString() + ":  ");
+                TextView parkingSpots2 = findViewById(R.id.parkingSpots2);
+                parkingSpots2.setText(dataSnapshot.child("2").child("parkingSpots").getValue().toString());
+
                 TextView name3 = findViewById(R.id.name3);
-                name3.setText(dataSnapshot.child("3").child("name").getValue().toString());
+                name3.setText(dataSnapshot.child("3").child("name").getValue().toString() + ":  ");
+                TextView parkingSpots3 = findViewById(R.id.parkingSpots3);
+                parkingSpots3.setText(dataSnapshot.child("3").child("parkingSpots").getValue().toString());
+
                 TextView name4 = findViewById(R.id.name4);
-                name4.setText(dataSnapshot.child("4").child("name").getValue().toString());
+                name4.setText(dataSnapshot.child("4").child("name").getValue().toString() + ":  ");
+                TextView parkingSpots4 = findViewById(R.id.parkingSpots4);
+                parkingSpots4.setText(dataSnapshot.child("4").child("parkingSpots").getValue().toString());
+
                 TextView name5 = findViewById(R.id.name5);
-                name5.setText(dataSnapshot.child("5").child("name").getValue().toString());
+                name5.setText(dataSnapshot.child("5").child("name").getValue().toString() + ":  ");
+                TextView parkingSpots5 = findViewById(R.id.parkingSpots5);
+                parkingSpots5.setText(dataSnapshot.child("5").child("parkingSpots").getValue().toString());
             }
 
             @Override
