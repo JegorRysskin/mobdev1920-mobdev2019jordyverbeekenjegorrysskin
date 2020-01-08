@@ -32,6 +32,8 @@ import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.Objects;
+
 
 public class MainActivity extends AppCompatActivity implements ParkingAdapterOnClickHandler {
 
@@ -67,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements ParkingAdapterOnC
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         loadParkingData(new MyCallback() {
             @Override
