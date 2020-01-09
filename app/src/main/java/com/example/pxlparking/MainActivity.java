@@ -3,10 +3,13 @@ package com.example.pxlparking;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -26,6 +29,10 @@ import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.lang.reflect.Array;
+
+import static com.example.pxlparking.App.CHANNEL_1_ID;
+
 
 public class MainActivity extends AppCompatActivity implements ParkingAdapterOnClickHandler {
 
@@ -37,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements ParkingAdapterOnC
     private ActionBarDrawerToggle mToggle;
     private NavigationView nv;
     private ParkingAdapterOnClickHandler mClickhandler;
+    private NotificationManagerCompat notificationManager;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference firebaseRootRef = database.getReference();
@@ -46,6 +54,11 @@ public class MainActivity extends AppCompatActivity implements ParkingAdapterOnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        notificationManager = NotificationManagerCompat.from(this);
+
+
         mRecyclerView = findViewById(R.id.reclyclerview_parking);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mRecyclerView.setAdapter(new ParkingAdapter(this, mCursor, this));
@@ -71,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements ParkingAdapterOnC
                 Log.d(MainActivity.class.getSimpleName(), jsonString);
             }
         });
+
 
         nv = findViewById(R.id.nav_view);
         nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -106,10 +120,23 @@ public class MainActivity extends AppCompatActivity implements ParkingAdapterOnC
     }
 
     private void loadParkingData(final MyCallback myCallback) {
-
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                   for (int i = 0; i < 5; i++) {
+                    if ((Long) dataSnapshot.child(i + "").child("parkingSpots").getValue() < 10) {
+                        Notification notification = new NotificationCompat.Builder(MainActivity.this, CHANNEL_1_ID)
+                                .setSmallIcon(R.drawable.ic_one)
+                                .setContentTitle("Volzet")
+                                .setContentText(dataSnapshot.child(i + "").child("name").getValue().toString())
+                                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                                .build();
+
+                        notificationManager.notify(i, notification);
+                    }
+                }
+
                 String jsonString = new Gson().toJson(dataSnapshot.getValue());
                 myCallback.onCallback(jsonString);
             }
@@ -135,6 +162,7 @@ public class MainActivity extends AppCompatActivity implements ParkingAdapterOnC
     @Override
     public void onClick(int adapterPosition) {
         Intent intent = new Intent(this, MapActivity.class);
+
 
         if (!mCursor.moveToPosition(adapterPosition))
             return;
