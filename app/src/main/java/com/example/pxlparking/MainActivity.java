@@ -30,6 +30,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.lang.reflect.Array;
+import java.util.Objects;
 
 import static com.example.pxlparking.App.CHANNEL_1_ID;
 
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements ParkingAdapterOnC
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         loadParkingData(new MyCallback() {
             @Override
