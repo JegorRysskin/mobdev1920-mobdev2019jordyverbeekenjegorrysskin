@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements ParkingAdapterOnC
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                    for (int i = 0; i < 5; i++) {
-                    if ((Long) dataSnapshot.child(i + "").child("parkingSpots").getValue() > 10) {
+                    if ((Long) dataSnapshot.child(i + "").child("parkingSpots").getValue() < 10) {
                         Notification notification = new NotificationCompat.Builder(MainActivity.this, CHANNEL_1_ID)
                                 .setSmallIcon(R.drawable.ic_one)
                                 .setContentTitle("Volzet")
