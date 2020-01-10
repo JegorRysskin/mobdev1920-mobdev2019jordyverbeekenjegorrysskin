@@ -15,14 +15,14 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
-            android:id="@+id/parkingListFragment" />
+            android:id="@+id/parkingListFragment_landscape" />
 
         <fragment
             android:name="com.example.pxlparking.MapFragment"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="5"
-            android:id="@+id/mapFragment" />
+            android:id="@+id/mapFragment_landscape" />
     </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
