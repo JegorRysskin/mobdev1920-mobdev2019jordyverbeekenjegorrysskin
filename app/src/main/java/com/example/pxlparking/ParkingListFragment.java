@@ -120,9 +120,7 @@ public class ParkingListFragment extends Fragment implements ParkingAdapterOnCli
     public void onClick(int adapterPosition) {
         Intent intent = new Intent(getActivity().getBaseContext(), MapActivity.class);
 
-
-        if (!mCursor.moveToPosition(adapterPosition))
-            return;
+        if (!mCursor.moveToPosition(adapterPosition)) return;
 
         String parkingName = mCursor.getString(mCursor.getColumnIndex("name"));
         String parkingSpots = mCursor.getString(mCursor.getColumnIndex("parkingSpots"));
