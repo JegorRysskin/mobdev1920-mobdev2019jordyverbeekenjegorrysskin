@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <bool name="saved_isChecked_default_key">false</bool>
+</resources>
