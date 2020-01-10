@@ -20,113 +20,209 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="220dp"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/border"
-                android:padding="25dp">
+                android:paddingTop="25dp"
+                android:paddingBottom="25dp">
+
+                <ToggleButton
+                    android:id="@+id/button_favorite0"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="5dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/button_favorite"
+                    android:checked="false"
+                    android:text=""
+                    android:textOff=""
+                    android:textOn="" />
 
                 <TextView
                     android:id="@+id/name0"
+                    android:layout_centerInParent="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
                     android:id="@+id/parkingSpots0"
+                    android:layout_centerInParent="true"
+                    android:layout_toEndOf="@+id/name0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
-            </LinearLayout>
+            </RelativeLayout>
 
-            <LinearLayout
+
+            <RelativeLayout
                 android:layout_width="220dp"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/border"
-                android:padding="25dp">
+                android:paddingTop="25dp"
+                android:paddingBottom="25dp">
+
+                <ToggleButton
+                    android:id="@+id/button_favorite1"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="5dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/button_favorite"
+                    android:checked="false"
+                    android:text=""
+                    android:textOff=""
+                    android:textOn="" />
 
                 <TextView
                     android:id="@+id/name1"
+                    android:layout_centerInParent="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
                     android:id="@+id/parkingSpots1"
+                    android:layout_centerInParent="true"
+                    android:layout_toEndOf="@+id/name1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
-            </LinearLayout>
+            </RelativeLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="220dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:gravity="center"
                 android:background="@drawable/border"
-                android:padding="25dp">
+                android:paddingTop="25dp"
+                android:paddingBottom="25dp">
+
+                <ToggleButton
+                    android:id="@+id/button_favorite2"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="5dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/button_favorite"
+                    android:checked="false"
+                    android:text=""
+                    android:textOff=""
+                    android:textOn="" />
 
                 <TextView
                     android:id="@+id/name2"
+                    android:layout_centerInParent="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
                     android:id="@+id/parkingSpots2"
+                    android:layout_centerInParent="true"
+                    android:layout_toEndOf="@+id/name2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
-            </LinearLayout>
+            </RelativeLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="220dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:gravity="center"
                 android:background="@drawable/border"
-                android:padding="25dp">
+                android:paddingTop="25dp"
+                android:paddingBottom="25dp">
+
+                <ToggleButton
+                    android:id="@+id/button_favorite3"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="5dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/button_favorite"
+                    android:checked="false"
+                    android:text=""
+                    android:textOff=""
+                    android:textOn="" />
 
                 <TextView
                     android:id="@+id/name3"
+                    android:layout_centerInParent="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
                     android:id="@+id/parkingSpots3"
+                    android:layout_centerInParent="true"
+                    android:layout_toEndOf="@+id/name3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
-            </LinearLayout>
+            </RelativeLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="220dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:gravity="center"
                 android:background="@drawable/border"
-                android:padding="25dp">
+                android:paddingTop="25dp"
+                android:paddingBottom="25dp">
+
+                <ToggleButton
+                    android:id="@+id/button_favorite4"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="5dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/button_favorite"
+                    android:checked="false"
+                    android:text=""
+                    android:textOff=""
+                    android:textOn="" />
 
                 <TextView
                     android:id="@+id/name4"
+                    android:layout_centerInParent="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
                     android:id="@+id/parkingSpots4"
+                    android:layout_centerInParent="true"
+                    android:layout_toEndOf="@+id/name4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
-            </LinearLayout>
+            </RelativeLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="220dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:gravity="center"
                 android:background="@drawable/border"
-                android:padding="25dp">
+                android:paddingTop="25dp"
+                android:paddingBottom="25dp">
+
+                <ToggleButton
+                    android:id="@+id/button_favorite5"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="5dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:background="@drawable/button_favorite"
+                    android:checked="false"
+                    android:text=""
+                    android:textOff=""
+                    android:textOn="" />
 
                 <TextView
                     android:id="@+id/name5"
+                    android:layout_centerInParent="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <TextView
                     android:id="@+id/parkingSpots5"
+                    android:layout_centerInParent="true"
+                    android:layout_toEndOf="@+id/name5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
-            </LinearLayout>
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/testTextView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
         </LinearLayout>
 

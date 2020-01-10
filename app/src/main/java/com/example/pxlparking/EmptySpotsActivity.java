@@ -8,11 +8,15 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.app.Notification;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
@@ -40,6 +44,8 @@ public class EmptySpotsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_empty_spots);
 
         notificationManager = NotificationManagerCompat.from(this);
+
+        getToggleButtonsFromLocalStorage();
 
         mDrawerLayout = findViewById(R.id.drawerLayout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
@@ -125,7 +131,29 @@ public class EmptySpotsActivity extends AppCompatActivity {
             }
         });
 
+        setToggleButtonsToLocalStorage();
+    }
 
+    private void getToggleButtonsFromLocalStorage() { for (int i = 0; i <= 5; i++){
+        ToggleButton toggle = findViewById(getResources().getIdentifier("button_favorite" + i, "id", getPackageName()));
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        boolean defaultValue = getResources().getBoolean(R.bool.saved_isChecked_default_key);
+        boolean isChecked = sharedPref.getBoolean(toggle.getId() + "", defaultValue);
+        toggle.setChecked(isChecked);
+    } }
+
+    private void setToggleButtonsToLocalStorage() { for (int i = 0; i <= 5; i++){
+            final ToggleButton toggle = findViewById(getResources().getIdentifier("button_favorite" + i, "id", getPackageName()));
+            toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putBoolean(toggle.getId() + "", isChecked);
+                    editor.apply();
+                }
+            });
+
+        }
     }
 
     @Override
