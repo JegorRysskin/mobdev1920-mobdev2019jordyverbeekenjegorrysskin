@@ -18,6 +18,8 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -118,9 +120,8 @@ public class ParkingListFragment extends Fragment implements ParkingAdapterOnCli
 
     @Override
     public void onClick(int adapterPosition) {
-        Intent intent = new Intent(getActivity().getBaseContext(), MapActivity.class);
 
-        if (!mCursor.moveToPosition(adapterPosition)) return;
+        Intent intent = new Intent(getActivity().getBaseContext(), MapActivity.class);
 
         String parkingName = mCursor.getString(mCursor.getColumnIndex("name"));
         String parkingSpots = mCursor.getString(mCursor.getColumnIndex("parkingSpots"));
@@ -129,11 +130,30 @@ public class ParkingListFragment extends Fragment implements ParkingAdapterOnCli
         double posLong = Double.parseDouble(mCursor.getString(mCursor.getColumnIndex("long")));
         double posLat = Double.parseDouble(mCursor.getString(mCursor.getColumnIndex("lat")));
 
-        intent.putExtra(Intent.EXTRA_TITLE, parkingName);
-        intent.putExtra("address", address);
-        intent.putExtra("geoLocation", new double[]{posLat, posLong});
-        intent.putExtra("parkingSpots", parkingSpots);
-        startActivity(intent);
+        if (!mCursor.moveToPosition(adapterPosition)) return;
+
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapFragment);
+
+        if (mapFragment != null && mapFragment.isVisible()){
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+            MapFragment newMapFragment = new MapFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("parkingName", parkingName);
+            bundle.putDoubleArray("geoLocation", new double[]{posLat, posLong});
+            newMapFragment.setArguments(bundle);
+
+            transaction.replace(mapFragment.getId(), newMapFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+
+        } else {
+            intent.putExtra(Intent.EXTRA_TITLE, parkingName);
+            intent.putExtra("address", address);
+            intent.putExtra("geoLocation", new double[]{posLat, posLong});
+            intent.putExtra("parkingSpots", parkingSpots);
+            startActivity(intent);
+        }
     }
 
     private interface MyCallback {
