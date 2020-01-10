@@ -80,12 +80,15 @@ public class EmptySpotsActivity extends AppCompatActivity {
         parkingReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (int i = 0; i < 5; i++) {
-                    if ((Long) dataSnapshot.child(i + "").child("parkingSpots").getValue() < 10) {
+                for (int i = 0; i <= 5; i++) {
+                    Long freeParkingSpots = (Long) dataSnapshot.child(i + "").child("parkingSpots").getValue();
+                    String parkingName = dataSnapshot.child(i + "").child("name").getValue().toString();
+
+                    if (freeParkingSpots == 20 || freeParkingSpots == 10 || freeParkingSpots == 5 && getFavorite(i)) {
                         Notification notification = new NotificationCompat.Builder(EmptySpotsActivity.this, CHANNEL_1_ID)
                                 .setSmallIcon(R.drawable.ic_one)
-                                .setContentTitle("Volzet")
-                                .setContentText(dataSnapshot.child(i + "").child("name").getValue().toString())
+                                .setContentTitle("Favoriet bijna volzet")
+                                .setContentText(parkingName + " heeft nog maar " + freeParkingSpots + " plaatsen vrij!")
                                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                                 .build();
@@ -134,21 +137,28 @@ public class EmptySpotsActivity extends AppCompatActivity {
         setToggleButtonsToLocalStorage();
     }
 
+    private boolean getFavorite(int index) {
+        SharedPreferences sharedPref = getSharedPreferences("favorite" ,Context.MODE_PRIVATE);
+        boolean defaultValue = getResources().getBoolean(R.bool.saved_isChecked_default_key);
+        return sharedPref.getBoolean("button_favorite" + index, defaultValue);
+    }
+
     private void getToggleButtonsFromLocalStorage() { for (int i = 0; i <= 5; i++){
         ToggleButton toggle = findViewById(getResources().getIdentifier("button_favorite" + i, "id", getPackageName()));
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getSharedPreferences("favorite", Context.MODE_PRIVATE);
         boolean defaultValue = getResources().getBoolean(R.bool.saved_isChecked_default_key);
-        boolean isChecked = sharedPref.getBoolean(toggle.getId() + "", defaultValue);
+        boolean isChecked = sharedPref.getBoolean("button_favorite" + i, defaultValue);
         toggle.setChecked(isChecked);
     } }
 
     private void setToggleButtonsToLocalStorage() { for (int i = 0; i <= 5; i++){
-            final ToggleButton toggle = findViewById(getResources().getIdentifier("button_favorite" + i, "id", getPackageName()));
-            toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        final ToggleButton toggle = findViewById(getResources().getIdentifier("button_favorite" + i, "id", getPackageName()));
+        final int finalI = i;
+        toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+                    SharedPreferences sharedPref = getSharedPreferences("favorite", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putBoolean(toggle.getId() + "", isChecked);
+                    editor.putBoolean("button_favorite" + finalI, isChecked);
                     editor.apply();
                 }
             });
