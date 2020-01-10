@@ -29,13 +29,6 @@ import static com.example.pxlparking.App.CHANNEL_1_ID;
 
 public class EmptySpotsActivity extends AppCompatActivity {
 
-    private ToggleButton favoriteButton0;
-    private ToggleButton favoriteButton1;
-    private ToggleButton favoriteButton2;
-    private ToggleButton favoriteButton3;
-    private ToggleButton favoriteButton4;
-    private ToggleButton favoriteButton5;
-
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     private NavigationView nv;

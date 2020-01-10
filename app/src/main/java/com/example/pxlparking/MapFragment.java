@@ -19,10 +19,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapFragment extends Fragment {
 
-    private String mParkingName;
+    private String mParkingName = "Oude Brandweer";
     private GoogleMap googleMap;
     MapView mMapView;
-    private double[] geoLatLong;
+    private double[] geoLatLong = { 50.933116, 5.351454};
 
 
     @Override
@@ -41,25 +41,27 @@ public class MapFragment extends Fragment {
         Bundle bundle = getArguments();
 
         if (bundle != null){
-            //TODO: default location upon load will be the one saved in local storage
-
             mParkingName = getArguments().getString("parkingName");
             geoLatLong = getArguments().getDoubleArray("geoLocation");
-
-            mMapView.getMapAsync(new OnMapReadyCallback() {
-                @Override
-                public void onMapReady(GoogleMap mMap) {
-                    googleMap = mMap;
-
-                    //googleMap.setMyLocationEnabled(true);
-
-                    LatLng PXLParking = new LatLng(geoLatLong[0], geoLatLong[1]);
-                    googleMap.addMarker(new MarkerOptions().position(PXLParking).title(mParkingName));
-                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(PXLParking, 15));
-                }
-            });
         }
+
+        setGoogleMaps(mParkingName, geoLatLong);
         return view;
+    }
+
+    private void setGoogleMaps(final String parkingName, final double[] geoLocation) {
+        mMapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap mMap) {
+                googleMap = mMap;
+
+                //googleMap.setMyLocationEnabled(true);
+
+                LatLng PXLParking = new LatLng(geoLocation[0], geoLocation[1]);
+                googleMap.addMarker(new MarkerOptions().position(PXLParking).title(parkingName));
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(PXLParking, 15));
+            }
+        });
     }
 
     @Override
