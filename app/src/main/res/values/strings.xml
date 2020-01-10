@@ -3,4 +3,7 @@
     <string name="parkingimage">parkingImage</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
+    <string name="adres">Adres:&#160;</string>
+    <string name="coordinates">Coördinaten:&#160;</string>
+    <string name="freespots">Vrije plaatsen:&#160;</string>
 </resources>
