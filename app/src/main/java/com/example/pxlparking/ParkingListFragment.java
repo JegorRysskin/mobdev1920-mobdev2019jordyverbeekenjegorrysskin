@@ -121,7 +121,11 @@ public class ParkingListFragment extends Fragment implements ParkingAdapterOnCli
     @Override
     public void onClick(int adapterPosition) {
 
-        Intent intent = new Intent(getActivity().getBaseContext(), MapActivity.class);
+        if (!mCursor.moveToPosition(adapterPosition)){
+            return;
+        } else {
+            mCursor.moveToPosition(adapterPosition);
+        }
 
         String parkingName = mCursor.getString(mCursor.getColumnIndex("name"));
         String parkingSpots = mCursor.getString(mCursor.getColumnIndex("parkingSpots"));
@@ -130,9 +134,8 @@ public class ParkingListFragment extends Fragment implements ParkingAdapterOnCli
         double posLong = Double.parseDouble(mCursor.getString(mCursor.getColumnIndex("long")));
         double posLat = Double.parseDouble(mCursor.getString(mCursor.getColumnIndex("lat")));
 
-        if (!mCursor.moveToPosition(adapterPosition)) return;
 
-        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapFragment);
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapFragment_landscape);
 
         if (mapFragment != null && mapFragment.isVisible()){
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -148,6 +151,7 @@ public class ParkingListFragment extends Fragment implements ParkingAdapterOnCli
             transaction.commit();
 
         } else {
+            Intent intent = new Intent(getActivity().getBaseContext(), MapActivity.class);
             intent.putExtra(Intent.EXTRA_TITLE, parkingName);
             intent.putExtra("address", address);
             intent.putExtra("geoLocation", new double[]{posLat, posLong});
