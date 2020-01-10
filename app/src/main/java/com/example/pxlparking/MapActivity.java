@@ -46,17 +46,21 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
             if (intentThatStartedThisActivity.hasExtra("address")) {
                 mAddress = intentThatStartedThisActivity.getStringExtra("address");
-                mAddressTextView.setText(mAddress);
+                mAddressTextView.setText(R.string.adres);
+                mAddressTextView.append(mAddress);
             }
             if (intentThatStartedThisActivity.hasExtra("geoLocation")) {
                 geoLatLong = intentThatStartedThisActivity.getDoubleArrayExtra("geoLocation");
                 mGeoLocation = geoLatLong[0] + ", " + geoLatLong[1];
 
-                mGeoLocationTextView.setText(mGeoLocation);
+                mGeoLocationTextView.setText(R.string.coordinates);
+                mGeoLocationTextView.append(mGeoLocation);
             }
             if (intentThatStartedThisActivity.hasExtra("parkingSpots")) {
                 mParkingSpots = intentThatStartedThisActivity.getStringExtra("parkingSpots");
-                mParkingSpotsTextView.setText(mParkingSpots);
+
+                mParkingSpotsTextView.setText(R.string.freespots);
+                mParkingSpotsTextView.append(mParkingSpots);
             }
         }
 
