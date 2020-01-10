@@ -3,6 +3,7 @@ package com.example.pxlparking;
 import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -82,12 +84,15 @@ public class ParkingListFragment extends Fragment implements ParkingAdapterOnCli
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (int i = 0; i < 5; i++) {
-                    if ((Long) dataSnapshot.child(i + "").child("parkingSpots").getValue() < 10) {
+                for (int i = 0; i <= 5; i++) {
+                    Long freeParkingSpots = (Long) dataSnapshot.child(i + "").child("parkingSpots").getValue();
+                    String parkingName = dataSnapshot.child(i + "").child("name").getValue().toString();
+
+                    if (freeParkingSpots == 20 || freeParkingSpots == 10 || freeParkingSpots == 5 && getFavorite(i)) {
                         Notification notification = new NotificationCompat.Builder(getContext(), CHANNEL_1_ID)
                                 .setSmallIcon(R.drawable.ic_one)
-                                .setContentTitle("Volzet")
-                                .setContentText(dataSnapshot.child(i + "").child("name").getValue().toString())
+                                .setContentTitle("Favoriet bijna volzet")
+                                .setContentText(parkingName + " heeft nog maar " + freeParkingSpots + " plaatsen vrij!")
                                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                                 .build();
@@ -106,6 +111,12 @@ public class ParkingListFragment extends Fragment implements ParkingAdapterOnCli
             }
         };
         parkingReference.addListenerForSingleValueEvent(valueEventListener);
+    }
+
+    private boolean getFavorite(int index) {
+        SharedPreferences sharedPref = getActivity().getSharedPreferences("favorite" ,Context.MODE_PRIVATE);
+        boolean defaultValue = getResources().getBoolean(R.bool.saved_isChecked_default_key);
+        return sharedPref.getBoolean("button_favorite" + index, defaultValue);
     }
 
     private Cursor getJSONCursor(String jsonString) {
