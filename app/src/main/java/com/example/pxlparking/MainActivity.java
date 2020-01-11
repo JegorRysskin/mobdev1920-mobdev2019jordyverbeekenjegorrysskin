@@ -1,6 +1,7 @@
 package com.example.pxlparking;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,7 +9,6 @@ import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.app.KeyguardManager;
 import android.content.Intent;
@@ -16,13 +16,10 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
-import java.net.Authenticator;
-import java.net.PasswordAuthentication;
 import java.util.Objects;
 import java.util.concurrent.Executor;
 
@@ -35,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private Executor executor;
     private BiometricPrompt biometricPrompt;
     private BiometricPrompt.PromptInfo promptInfo;
+    static final int INTENT_AUTHENTICATE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,21 +80,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void implementBiometrics() {
         BiometricManager biometricManager = BiometricManager.from(this);
-        switch (biometricManager.canAuthenticate()) {
-            case BiometricManager.BIOMETRIC_SUCCESS:
-                Log.d("MY_APP_TAG", "App can authenticate using biometrics.");
-                showBiometricsLogin();
-                break;
-            case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
-                Log.e("MY_APP_TAG", "No biometric features available on this device.");
-                break;
-            case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
-                Log.e("MY_APP_TAG", "Biometric features are currently unavailable.");
-                break;
-            case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
-                Log.e("MY_APP_TAG", "The user hasn't associated " +
-                        "any biometric credentials with their account.");
-                break;
+        if (biometricManager.canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS) {
+            Log.d("MY_APP_TAG", "App can authenticate using biometrics.");
+            showBiometricsLogin();
+        } else {
+            alternativeLogin();
         }
     }
 
@@ -117,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 if (errorCode == BiometricPrompt.ERROR_LOCKOUT){
-                    MainActivity.super.finish();
+                    alternativeLogin();
                 }
             }
 
@@ -138,8 +126,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         promptInfo = new BiometricPrompt.PromptInfo.Builder()
-                .setTitle("Biometric login for my PXLParking")
-                .setSubtitle("Log in using your biometric credential")
+                .setTitle("Authenticatie voor PXLParking")
+                .setSubtitle("Log in met je type van beveiliging")
                 .setDeviceCredentialAllowed(true)
                 .build();
 
@@ -147,6 +135,27 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void alternativeLogin() {
+        KeyguardManager km = (KeyguardManager) getSystemService(KEYGUARD_SERVICE);
+        if (km.isKeyguardSecure()) {
+            Intent authIntent = km.createConfirmDeviceCredentialIntent("Authenticatie voor PXLParking", "Log in met je type van beveiliging");
+            startActivityForResult(authIntent, INTENT_AUTHENTICATE);
+        } else {
+            Toast.makeText(getApplicationContext(), "Voeg apparaatbeveiliging toe om PXLParking te gebruiken!", Toast.LENGTH_LONG).show();
+            MainActivity.super.finish();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+            if (requestCode == INTENT_AUTHENTICATE) {
+                if (resultCode != RESULT_OK) {
+                    MainActivity.super.finish();
+                }
+            }
+
+    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
