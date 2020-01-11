@@ -84,20 +84,23 @@ public class ParkingListFragment extends Fragment implements ParkingAdapterOnCli
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Context context = getContext();
                 for (int i = 0; i <= 5; i++) {
                     Long freeParkingSpots = (Long) dataSnapshot.child(i + "").child("parkingSpots").getValue();
                     String parkingName = dataSnapshot.child(i + "").child("name").getValue().toString();
 
                     if (freeParkingSpots == 20 || freeParkingSpots == 10 || freeParkingSpots == 5 && getFavorite(i)) {
-                        Notification notification = new NotificationCompat.Builder(getContext(), CHANNEL_1_ID)
-                                .setSmallIcon(R.drawable.ic_one)
-                                .setContentTitle("Favoriet bijna volzet")
-                                .setContentText(parkingName + " heeft nog maar " + freeParkingSpots + " plaatsen vrij!")
-                                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-                                .build();
+                        if (context != null){
+                            Notification notification = new NotificationCompat.Builder(context, CHANNEL_1_ID)
+                                    .setSmallIcon(R.drawable.ic_one)
+                                    .setContentTitle("Favoriet bijna volzet")
+                                    .setContentText(parkingName + " heeft nog maar " + freeParkingSpots + " plaatsen vrij!")
+                                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                                    .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                                    .build();
 
-                        notificationManager.notify(i, notification);
+                            notificationManager.notify(i, notification);
+                        }
                     }
                 }
 
