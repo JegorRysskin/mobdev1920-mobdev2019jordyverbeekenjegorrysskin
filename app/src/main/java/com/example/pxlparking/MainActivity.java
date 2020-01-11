@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d("MY_APP_TAG", "App can authenticate using biometrics.");
             showBiometricsLogin();
         } else {
-            alternativeLogin();
+            //alternativeLogin();
         }
     }
 

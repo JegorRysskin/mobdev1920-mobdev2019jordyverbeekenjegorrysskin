@@ -89,11 +89,11 @@ public class ParkingListFragment extends Fragment implements ParkingAdapterOnCli
                     Long freeParkingSpots = (Long) dataSnapshot.child(i + "").child("parkingSpots").getValue();
                     String parkingName = dataSnapshot.child(i + "").child("name").getValue().toString();
 
-                    if (freeParkingSpots == 20 || freeParkingSpots == 10 || freeParkingSpots == 5 && getFavorite(i)) {
+                    if (getFavorite(i) && (freeParkingSpots == 20 || freeParkingSpots == 10 || freeParkingSpots == 5)) {
                         if (context != null){
                             Notification notification = new NotificationCompat.Builder(context, CHANNEL_1_ID)
                                     .setSmallIcon(R.drawable.ic_one)
-                                    .setContentTitle("Favoriet bijna volzet")
+                                    .setContentTitle("Favoriete parking bijna volzet")
                                     .setContentText(parkingName + " heeft nog maar " + freeParkingSpots + " plaatsen vrij!")
                                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                                     .setCategory(NotificationCompat.CATEGORY_MESSAGE)
