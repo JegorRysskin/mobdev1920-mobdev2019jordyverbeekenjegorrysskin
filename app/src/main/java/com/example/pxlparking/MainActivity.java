@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
     private BiometricPrompt.PromptInfo promptInfo;
     static final int INTENT_AUTHENTICATE = 1;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
 
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
-
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         nv = findViewById(R.id.nav_view);
@@ -63,8 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 int id = item.getItemId();
                 switch (id) {
                     case R.id.nav_home:
-                        Intent intentMainActivity = new Intent(MainActivity.this, MainActivity.class);
-                        startActivity(intentMainActivity);
+                        mDrawerLayout.closeDrawers();
                         break;
                     case R.id.nav_empty:
                         Intent intentEmptySpotsActivity = new Intent(MainActivity.this, EmptySpotsActivity.class);
