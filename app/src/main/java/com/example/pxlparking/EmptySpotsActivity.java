@@ -61,6 +61,7 @@ public class EmptySpotsActivity extends AppCompatActivity {
                 switch (id) {
                     case R.id.nav_home:
                         onOptionsItemSelected(item);
+                        mDrawerLayout.closeDrawers();
                         break;
                     case R.id.nav_empty:
                         mDrawerLayout.closeDrawers();

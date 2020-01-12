@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_empty:
                         Intent intentEmptySpotsActivity = new Intent(MainActivity.this, EmptySpotsActivity.class);
                         startActivity(intentEmptySpotsActivity);
+                        mDrawerLayout.closeDrawers();
                         break;
                     default:
                         return true;
