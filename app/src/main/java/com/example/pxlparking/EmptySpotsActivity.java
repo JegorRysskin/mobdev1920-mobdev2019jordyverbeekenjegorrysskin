@@ -1,22 +1,20 @@
 package com.example.pxlparking;
 
+import android.app.Notification;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.view.MenuItem;
+import android.widget.CompoundButton;
+import android.widget.TextView;
+import android.widget.ToggleButton;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-
-import android.app.Notification;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.widget.CompoundButton;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
@@ -62,12 +60,10 @@ public class EmptySpotsActivity extends AppCompatActivity {
                 int id = item.getItemId();
                 switch (id) {
                     case R.id.nav_home:
-                        Intent intentMainActivity = new Intent(EmptySpotsActivity.this, MainActivity.class);
-                        startActivity(intentMainActivity);
+                        onOptionsItemSelected(item);
                         break;
                     case R.id.nav_empty:
-                        Intent intentEmptySpotsActivity = new Intent(EmptySpotsActivity.this, EmptySpotsActivity.class);
-                        startActivity(intentEmptySpotsActivity);
+                        mDrawerLayout.closeDrawers();
                         break;
                     default:
                         return true;
@@ -168,13 +164,14 @@ public class EmptySpotsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
         if (mToggle.onOptionsItemSelected(item)) {
             return true;
         }
 
+        if (item.getItemId() == R.id.nav_home) {
+            super.onBackPressed();
+        }
+
         return super.onOptionsItemSelected(item);
     }
-
-
 }
