@@ -9,10 +9,13 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -23,7 +26,33 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.util.ArrayList;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
 
@@ -39,9 +68,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
 
+    private LatLng currentPosition;
+    private Marker currentLocationMarker;
+    private Double lat;
+    private Double lng;
 
-    LocationManager locationManager;
-    String provider;
+    private Location locationParking;
+    private Location locationCurrent;
+
+    private LocationManager locationManager;
+    private String provider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +87,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         provider = locationManager.getBestProvider(new Criteria(), false);
+
+        locationParking = new Location(provider);
+        locationCurrent = new Location(provider);
 
         checkLocationPermission();
 
@@ -90,6 +129,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         LatLng PXLParking = new LatLng(geoLatLong[0], geoLatLong[1]);
+        locationParking.setLongitude(geoLatLong[1]);
+        locationParking.setLatitude(geoLatLong[0]);
         mMap.addMarker(new MarkerOptions().position(PXLParking).title(mParkingName));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(PXLParking, 15));
 
@@ -170,8 +211,21 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     @Override
     public void onLocationChanged(Location location) {
-        Double lat = location.getLatitude();
-        Double lng = location.getLongitude();
+        if (currentLocationMarker != null) {
+            currentLocationMarker.remove();
+        }
+
+        lat = location.getLatitude();
+        lng = location.getLongitude();
+
+        currentPosition = new LatLng(lat, lng);
+        currentLocationMarker = mMap.addMarker(new MarkerOptions().position(currentPosition).title("Current location"));
+
+        locationCurrent.setLongitude(lng);
+        locationCurrent.setLatitude(lat);
+        TextView text = findViewById(R.id.tv_parkingSpots);
+        String test = locationCurrent.distanceTo(locationParking) + "";
+        text.setText(test);
 
         Log.i("Location info: Lat", lat.toString());
         Log.i("Location info: Lng", lng.toString());
@@ -190,5 +244,27 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public void onProviderDisabled(String provider) {
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+
+            locationManager.requestLocationUpdates(provider, 400, 1, this);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+
+            locationManager.removeUpdates(this);
+        }
     }
 }
