@@ -186,9 +186,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         locationCurrent.setLongitude(lng);
         locationCurrent.setLatitude(lat);
-        TextView text = findViewById(R.id.tv_parkingSpots);
-        String distance = locationCurrent.distanceTo(locationParking) + "";
-        text.setText(distance);
+        TextView text = findViewById(R.id.tv_distance);
+        String distance = (locationCurrent.distanceTo(locationParking) / 1000) + "";
+        text.setText("Afstand tot parking: " + distance.substring(0, 5) + " km" );
     }
 
     @Override
