@@ -1,18 +1,20 @@
 package com.example.pxlparking;
 
+import android.app.Notification;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.view.MenuItem;
+import android.widget.CompoundButton;
+import android.widget.TextView;
+import android.widget.ToggleButton;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-
-import android.app.Notification;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
@@ -41,6 +43,8 @@ public class EmptySpotsActivity extends AppCompatActivity {
 
         notificationManager = NotificationManagerCompat.from(this);
 
+        getToggleButtonsFromLocalStorage();
+
         mDrawerLayout = findViewById(R.id.drawerLayout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
 
@@ -56,12 +60,11 @@ public class EmptySpotsActivity extends AppCompatActivity {
                 int id = item.getItemId();
                 switch (id) {
                     case R.id.nav_home:
-                        Intent intentMainActivity = new Intent(EmptySpotsActivity.this, MainActivity.class);
-                        startActivity(intentMainActivity);
+                        onOptionsItemSelected(item);
+                        mDrawerLayout.closeDrawers();
                         break;
                     case R.id.nav_empty:
-                        Intent intentEmptySpotsActivity = new Intent(EmptySpotsActivity.this, EmptySpotsActivity.class);
-                        startActivity(intentEmptySpotsActivity);
+                        mDrawerLayout.closeDrawers();
                         break;
                     default:
                         return true;
@@ -74,12 +77,15 @@ public class EmptySpotsActivity extends AppCompatActivity {
         parkingReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (int i = 0; i < 5; i++) {
-                    if ((Long) dataSnapshot.child(i + "").child("parkingSpots").getValue() < 10) {
+                for (int i = 0; i <= 5; i++) {
+                    Long freeParkingSpots = (Long) dataSnapshot.child(i + "").child("parkingSpots").getValue();
+                    String parkingName = dataSnapshot.child(i + "").child("name").getValue().toString();
+
+                    if (getFavorite(i) && (freeParkingSpots == 20 || freeParkingSpots == 10 || freeParkingSpots == 5)) {
                         Notification notification = new NotificationCompat.Builder(EmptySpotsActivity.this, CHANNEL_1_ID)
                                 .setSmallIcon(R.drawable.ic_one)
-                                .setContentTitle("Volzet")
-                                .setContentText(dataSnapshot.child(i + "").child("name").getValue().toString())
+                                .setContentTitle("Favoriete parking bijna volzet")
+                                .setContentText(parkingName + " heeft nog maar " + freeParkingSpots + " plaatsen vrij!")
                                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                                 .build();
@@ -125,18 +131,48 @@ public class EmptySpotsActivity extends AppCompatActivity {
             }
         });
 
+        setToggleButtonsToLocalStorage();
+    }
 
+    private boolean getFavorite(int index) {
+        SharedPreferences sharedPref = getSharedPreferences("favorite" ,Context.MODE_PRIVATE);
+        boolean defaultValue = getResources().getBoolean(R.bool.saved_isChecked_default_key);
+        return sharedPref.getBoolean("button_favorite" + index, defaultValue);
+    }
+
+    private void getToggleButtonsFromLocalStorage() { for (int i = 0; i <= 5; i++){
+        ToggleButton toggle = findViewById(getResources().getIdentifier("button_favorite" + i, "id", getPackageName()));
+        SharedPreferences sharedPref = getSharedPreferences("favorite", Context.MODE_PRIVATE);
+        boolean defaultValue = getResources().getBoolean(R.bool.saved_isChecked_default_key);
+        boolean isChecked = sharedPref.getBoolean("button_favorite" + i, defaultValue);
+        toggle.setChecked(isChecked);
+    } }
+
+    private void setToggleButtonsToLocalStorage() { for (int i = 0; i <= 5; i++){
+        final ToggleButton toggle = findViewById(getResources().getIdentifier("button_favorite" + i, "id", getPackageName()));
+        final int finalI = i;
+        toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    SharedPreferences sharedPref = getSharedPreferences("favorite", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putBoolean("button_favorite" + finalI, isChecked);
+                    editor.apply();
+                }
+            });
+
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
         if (mToggle.onOptionsItemSelected(item)) {
             return true;
         }
 
+        if (item.getItemId() == R.id.nav_home) {
+            super.onBackPressed();
+        }
+
         return super.onOptionsItemSelected(item);
     }
-
-
 }

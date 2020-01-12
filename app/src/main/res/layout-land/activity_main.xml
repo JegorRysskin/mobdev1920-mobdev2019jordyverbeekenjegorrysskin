@@ -2,14 +2,28 @@
 <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/drawerLayout_portrait"
+    android:id="@+id/drawerLayout_landscape"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <fragment
-        android:name="com.example.pxlparking.ParkingListFragment"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/parkingListFragment_portrait" />
+        android:baselineAligned="false">
+
+        <fragment
+            android:name="com.example.pxlparking.ParkingListFragment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:id="@+id/parkingListFragment_landscape" />
+
+        <fragment
+            android:name="com.example.pxlparking.MapFragment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:id="@+id/mapFragment_landscape" />
+    </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"

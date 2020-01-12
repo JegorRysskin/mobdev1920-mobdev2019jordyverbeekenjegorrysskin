@@ -10,9 +10,11 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -78,21 +80,25 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
             if (intentThatStartedThisActivity.hasExtra("address")) {
                 mAddress = intentThatStartedThisActivity.getStringExtra("address");
-                mAddressTextView.setText(mAddress);
+                mAddressTextView.setText(R.string.adres);
+                mAddressTextView.append(mAddress);
             }
             if (intentThatStartedThisActivity.hasExtra("geoLocation")) {
                 geoLatLong = intentThatStartedThisActivity.getDoubleArrayExtra("geoLocation");
                 mGeoLocation = geoLatLong[0] + ", " + geoLatLong[1];
 
-                mGeoLocationTextView.setText(mGeoLocation);
+                mGeoLocationTextView.setText(R.string.coordinates);
+                mGeoLocationTextView.append(mGeoLocation);
             }
             if (intentThatStartedThisActivity.hasExtra("parkingSpots")) {
                 mParkingSpots = intentThatStartedThisActivity.getStringExtra("parkingSpots");
-                mParkingSpotsTextView.setText(mParkingSpots);
+
+                mParkingSpotsTextView.setText(R.string.freespots);
+                mParkingSpotsTextView.append(mParkingSpots);
             }
         }
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_activity);
         mapFragment.getMapAsync(this);
     }
 
@@ -220,5 +226,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             locationManager.removeUpdates(this);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            super.onBackPressed();
+        }
+        return true;
+
     }
 }
